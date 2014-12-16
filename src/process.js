@@ -21,9 +21,9 @@ function startProcess( target ) {
 				// the only known use case I've seen for this so far is due to
 				// ENOENT on the command itself
 				var error = new Error( 'Attempting to execute the command "' + 
-					target.command + '" at "' + ( target.path || path.resolve( './' ) ) + '" failed with "' + e.toString() + '"' 
+					target.command + '" at "' + ( target.path || path.resolve( './' ) ) + '" failed with "' + e.toString().replace( 'Error: ', '' ) + '"' 
 				);
-				notify( { source: 'stderr', data: error.toString() } );
+				notify( { source: 'stderr', data: error.toString().replace( 'Error: ', '' ) } );
 				reject( error );
 			} );
 			pid.on( 'close', function( code ) {

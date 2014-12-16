@@ -1,5 +1,8 @@
 ## 0.1.#
 
+### 0.1.4
+Chill out with the 'Error:' prefix all over the place in the event of an errored step.
+
 ### 0.1.3
 Properly catch and handle ENOENTs resulting from commands not found.
 
