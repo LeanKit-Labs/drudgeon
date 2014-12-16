@@ -29,10 +29,11 @@ drudgeon( set )
 		// data.stdout - data written to stdout
 	} )
 	.then( function( output ) {
-		// output is an array of all data written to stdout or stderr
+		// output is a hash of all data written to stdout or stderr keyed by step name
 	} )
 	.then( null, function( output ) {
-		// output is an array of all data written to stdout or stderr
+		// output.failedStep will be the name of the step that failed
+		// output is a hash of all data written to stdout or stderr keyed by step name
 	} );
 ```
 

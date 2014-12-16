@@ -109,6 +109,7 @@ describe( 'FSM', function() {
 
 			it( 'should return collected output', function() {
 				outcome.should.eql( {
+					failedStep: 'two',
 					one: [ "running a!" ],
 					two: [ "running b!" ]
 				} );

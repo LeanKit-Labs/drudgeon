@@ -1,6 +1,6 @@
 {
   "name": "drudgeon",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A state-machine-driven shell command runner",
   "main": "src/index.js",
   "scripts": {
@@ -22,7 +22,9 @@
   "homepage": "https://github.com/LeanKit-Labs/drudgeon",
   "devDependencies": {
     "gulp": "^3.8.7",
+    "gulp-istanbul": "^0.5.0",
     "gulp-mocha": "^1.0.0",
+    "open": "0.0.5",
     "should": "^4.0.4"
   },
   "dependencies": {

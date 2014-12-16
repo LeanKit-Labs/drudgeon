@@ -4,3 +4,5 @@ node_modules/
 *npm-debug.log
 data
 tmp
+.grapplehound.json
+coverage/
