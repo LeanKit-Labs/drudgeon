@@ -2,6 +2,7 @@ var _ = require( 'lodash' );
 var when = require( 'when' );
 var exec = require( 'child_process' ).exec;
 var spawn = require( 'win-spawn' );
+var path = require( 'path' );
 
 function startProcess( target ) {
 	return when.promise( function( resolve, reject, notify ) {
@@ -15,6 +16,15 @@ function startProcess( target ) {
 			pid.stderr.setEncoding( 'utf8' );
 			pid.stdout.on( 'data', function( data ) {
 				notify( { source: 'stdout', data: data } );
+			} );
+			pid.on( 'error', function( e ) {
+				// the only known use case I've seen for this so far is due to
+				// ENOENT on the command itself
+				var error = new Error( 'Attempting to execute the command "' + 
+					target.command + '" at "' + ( target.path || path.resolve( './' ) ) + '" failed with "' + e.toString() + '"' 
+				);
+				notify( { source: 'stderr', data: error.toString() } );
+				reject( error );
 			} );
 			pid.on( 'close', function( code ) {
 				if( code !== 0 ) { // || errors.length > 0
@@ -33,22 +43,6 @@ function startProcess( target ) {
 	} );
 }
 
-function executeCommand( line, path ) {
-	return when.promise( function( resolve, reject ) {
-		var command = _.isArray( line ) ? line.join( ' ' ) : line;
-		exec( command, 
-			{ cwd: path },
-			function( err, stdout, stderr ) {
-				if( err ) {
-					reject( { error: err, output: stdout } );
-				} else {
-					resolve( stdout );
-				}
-			} );
-	} );
-}
-
 module.exports = {
-	start: startProcess,
-	execute: executeCommand
+	start: startProcess
 };

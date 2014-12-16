@@ -1,6 +1,6 @@
 {
   "name": "drudgeon",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A state-machine-driven shell command runner",
   "main": "src/index.js",
   "scripts": {
