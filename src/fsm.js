@@ -78,6 +78,7 @@ function createMachine( exec, commandSet, workingPath ) {
 				}.bind( this ) ).once();
 				this.on( 'commands.failed', function( error ) {
 					stream.unsubscribe();
+					this.stepOutput.failedStep = this.state;
 					reject( this.stepOutput );
 				}.bind( this ) ).once();
 				this.transition( this._steps[ 0 ] );
