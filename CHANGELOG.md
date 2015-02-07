@@ -1,5 +1,9 @@
 ## 0.1.#
 
+### 0.1.6
+ * Emit events for starting/finishing steps
+ * Remove junk console.log statements
+
 ### 0.1.5
 Get tests passing on Windows. (path issues and odd bug that only appears on windows)
 

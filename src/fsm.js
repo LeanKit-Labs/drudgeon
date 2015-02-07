@@ -12,6 +12,7 @@ function addStep( exec, step, name, workingPath, context ) {
 	var failed = name + '-failed';
 	var shell = {
 		_onEnter: function() {
+			context.emit( 'starting.' + name, name );
 			var result = this._handlers( name );
 			step.path = path.join( workingPath, step.path || '' );
 			debug( 'Executing step "%s": "%s" with args "%s" at "%s"', name, step.command, step.arguments, step.path );
@@ -23,6 +24,7 @@ function addStep( exec, step, name, workingPath, context ) {
 		}.bind( context )
 	};
 	shell[ succeeded ] = function() {
+		this.emit( 'finished.' + name, name );
 		this._nextStep();
 	}.bind( context );
 	shell[ failed ] = function( err ) {
@@ -64,7 +66,6 @@ function createMachine( exec, commandSet, workingPath ) {
 
 		_nextStep: function() {
 			var currentStep = this._steps[ this._index ];
-			console.log( this._steps, this._index, currentStep );
 			if ( currentStep === _.last( this._steps ) ) {
 				this.emit( 'commands.complete' );
 			} else {
@@ -87,7 +88,6 @@ function createMachine( exec, commandSet, workingPath ) {
 				this.on( 'commands.failed', function( error ) {
 					stream.unsubscribe();
 					this.stepOutput.failedStep = this.state;
-					console.log( 'ERROR', error.stack );
 					reject( this.stepOutput );
 				}.bind( this ) ).once();
 				this.transition( this._steps[ 0 ] );

@@ -39,6 +39,8 @@ describe( 'FSM', function() {
 
 		describe( 'when all steps succeed', function() {
 			var output = [];
+			var starting = [];
+			var finished = [];
 			var execStub;
 			var machine;
 			var outcome;
@@ -60,6 +62,12 @@ describe( 'FSM', function() {
 					return responses[ key ]();
 				};
 				machine = fsm( execStub, steps );
+				machine.on( 'starting.#', function( env ) {
+					starting.push( env );
+				} );
+				machine.on( 'finished.#', function( env ) {
+					finished.push( env );
+				} );
 				machine.run()
 					.progress( function( l ) {
 						output.push( l.stdout );
@@ -86,10 +94,17 @@ describe( 'FSM', function() {
 					'c - part 2',
 				] );
 			} );
+
+			it( 'should get starting and finished events for all steps', function() {
+				starting.should.eql( [ 'one', 'two', 'three' ] );
+				finished.should.eql( [ 'one', 'two', 'three' ] );
+			} );
 		} );
 
 		describe( 'when a step fails', function() {
 			var output = [];
+			var starting = [];
+			var finished = [];
 			var execStub;
 			var machine;
 			var outcome;
@@ -111,6 +126,12 @@ describe( 'FSM', function() {
 					return responses[ key ]();
 				};
 				machine = fsm( execStub, steps );
+				machine.on( 'starting.#', function( env ) {
+					starting.push( env );
+				} );
+				machine.on( 'finished.#', function( env ) {
+					finished.push( env );
+				} );
 				machine.run()
 					.progress( function( l ) {
 						output.push( l.stdout );
@@ -134,6 +155,11 @@ describe( 'FSM', function() {
 					'running a!',
 					'running b!'
 				] );
+			} );
+
+			it( 'should get starting and finished events for successful steps', function() {
+				starting.should.eql( [ 'one', 'two' ] );
+				finished.should.eql( [ 'one' ] );
 			} );
 		} );
 	} );
