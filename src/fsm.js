@@ -5,6 +5,8 @@ var path = require( 'path' );
 var Monologue = require( 'monologue.js' )( _ );
 var debug = require( 'debug' )( 'drudgeon' );
 
+var LOCAL = '.' + path.sep;
+
 function addStep( exec, step, name, workingPath, context ) {
 	var succeeded = name + '-done';
 	var failed = name + '-failed';
@@ -20,14 +22,18 @@ function addStep( exec, step, name, workingPath, context ) {
 				.catch( result.failure );
 		}.bind( context )
 	};
-	shell[ succeeded ] = function() { this._nextStep(); }.bind( context );
-	shell[ failed ] = function( err ) { this.emit( 'commands.failed', err ); }.bind( context );
+	shell[ succeeded ] = function() {
+		this._nextStep();
+	}.bind( context );
+	shell[ failed ] = function( err ) {
+		this.emit( 'commands.failed', err );
+	}.bind( context );
 	context.states[ name ] = shell;
 	context._steps.push( name );
 }
 
 function createMachine( exec, commandSet, workingPath ) {
-	workingPath = workingPath || commandSet.path || './';
+	workingPath = workingPath || commandSet.path || LOCAL;
 
 	var Machine = machina.Fsm.extend( {
 		_steps: [],
@@ -49,7 +55,7 @@ function createMachine( exec, commandSet, workingPath ) {
 		},
 
 		_handlers: function( op ) {
-			return  { 
+			return {
 				output: this._aggregate( op ),
 				success: this._handler( op + '-done' ),
 				failure: this._handler( op + '-failed' )
@@ -58,10 +64,12 @@ function createMachine( exec, commandSet, workingPath ) {
 
 		_nextStep: function() {
 			var currentStep = this._steps[ this._index ];
-			if( currentStep === _.last( this._steps ) ) {
+			console.log( this._steps, this._index, currentStep );
+			if ( currentStep === _.last( this._steps ) ) {
 				this.emit( 'commands.complete' );
 			} else {
-				this.transition( this._steps[ ( ++ this._index ) ] );
+				var nextStep = this._steps[ ( ++this._index ) ];
+				this.transition( nextStep );
 			}
 		},
 
@@ -79,6 +87,7 @@ function createMachine( exec, commandSet, workingPath ) {
 				this.on( 'commands.failed', function( error ) {
 					stream.unsubscribe();
 					this.stepOutput.failedStep = this.state;
+					console.log( 'ERROR', error.stack );
 					reject( this.stepOutput );
 				}.bind( this ) ).once();
 				this.transition( this._steps[ 0 ] );

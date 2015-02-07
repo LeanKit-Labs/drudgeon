@@ -1,7 +1,8 @@
-var should = require( 'should' );
+var should = require( 'should' ); //jshint ignore:line
 var _ = require( 'lodash' );
 var commandSet = require( '../src/set.js' );
-
+var path = require( 'path' );
+var LOCAL = '.' + path.sep;
 var flat = {
 	'one': 'gulp build',
 	'two': './spec/:gulp test',
@@ -25,16 +26,16 @@ var simple = {
 
 var verbose = {
 	'one': {
-		command: 	'gulp',
-		arguments: 	[ 'build' ]
+		command: 'gulp',
+		arguments: [ 'build' ]
 	},
 	'two': {
-		command: 	'gulp',
-		arguments: 	[ 'test' ]
+		command: 'gulp',
+		arguments: [ 'test' ]
 	},
 	'three': {
-		command: 	'node',
-		arguments: 	[ './src/index.js' ]
+		command: 'node',
+		arguments: [ './src/index.js' ]
 	}
 };
 
@@ -56,8 +57,8 @@ var repetitive = {
 		},
 		'*': {
 			'one': {
-			cmd: 'gulp',
-			args: [ 'build' ]
+				cmd: 'gulp',
+				args: [ 'build' ]
 			},
 			'two': {
 				cmd: 'gulp',
@@ -87,7 +88,7 @@ var filtered = {
 		},
 		args: [ './src/index.js' ]
 	}
-}
+};
 
 var revised = {
 	'one': 'gulp build',
@@ -124,7 +125,7 @@ var progressive = {
 			four: undefined
 		}
 	}
-}
+};
 
 describe( 'Command Sets', function() {
 	describe( 'when loading progressive step list', function() {
@@ -141,17 +142,17 @@ describe( 'Command Sets', function() {
 			it( 'should parse to the correct representation', function() {
 				set.should.eql( {
 					'one': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'build' ]
 					},
 					'two': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'test' ]
 					},
 					'three': {
-						path: './',
+						path: LOCAL,
 						command: 'nginx',
 						arguments: [ 'reset' ]
 					}
@@ -171,17 +172,17 @@ describe( 'Command Sets', function() {
 			it( 'should parse to the correct representation', function() {
 				set.should.eql( {
 					'one': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'build' ]
 					},
 					'two': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'win-test' ]
 					},
 					'four': {
-						path: './',
+						path: LOCAL,
 						command: 'iis-reset',
 						arguments: [ '--hard' ]
 					}
@@ -204,17 +205,17 @@ describe( 'Command Sets', function() {
 			it( 'should parse to the correct representation', function() {
 				set.should.eql( {
 					'one': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'build' ]
 					},
 					'two': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'test' ]
 					},
 					'three': {
-						path: './',
+						path: LOCAL,
 						command: 'node',
 						arguments: [ './src/index.js' ]
 					}
@@ -234,17 +235,17 @@ describe( 'Command Sets', function() {
 			it( 'should parse to the correct representation', function() {
 				set.should.eql( {
 					'one': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'build' ]
 					},
 					'two': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'test' ]
 					},
 					'three': {
-						path: './',
+						path: LOCAL,
 						command: 'node.cmd',
 						arguments: [ './src/index.js' ]
 					}
@@ -267,17 +268,17 @@ describe( 'Command Sets', function() {
 			it( 'should parse to the correct representation', function() {
 				set.should.eql( {
 					'one': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'build' ]
 					},
 					'two': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'test' ]
 					},
 					'three': {
-						path: './',
+						path: LOCAL,
 						command: 'node',
 						arguments: [ './src/index.js' ]
 					}
@@ -297,17 +298,17 @@ describe( 'Command Sets', function() {
 			it( 'should parse to the correct representation', function() {
 				set.should.eql( {
 					'one': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'build' ]
 					},
 					'two': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'test' ]
 					},
 					'three': {
-						path: './',
+						path: LOCAL,
 						command: 'node.cmd',
 						arguments: [ './src/index.js' ]
 					}
@@ -330,17 +331,17 @@ describe( 'Command Sets', function() {
 			it( 'should parse to the correct representation', function() {
 				set.should.eql( {
 					'one': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'build' ]
 					},
 					'two': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'test' ]
 					},
 					'three': {
-						path: './',
+						path: LOCAL,
 						command: 'node',
 						arguments: [ './src/index.js' ]
 					}
@@ -360,17 +361,17 @@ describe( 'Command Sets', function() {
 			it( 'should parse to the correct representation', function() {
 				set.should.eql( {
 					'one': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'build' ]
 					},
 					'two': {
-						path: './',
+						path: LOCAL,
 						command: 'gulp',
 						arguments: [ 'test' ]
 					},
 					'three': {
-						path: './',
+						path: LOCAL,
 						command: 'node.cmd',
 						arguments: [ './src/index.js' ]
 					}
@@ -392,7 +393,7 @@ describe( 'Command Sets', function() {
 		it( 'should parse to the correct representation', function() {
 			set.should.eql( {
 				'one': {
-					path: './',
+					path: LOCAL,
 					command: 'gulp',
 					arguments: [ 'build' ]
 				},
@@ -402,7 +403,7 @@ describe( 'Command Sets', function() {
 					arguments: [ 'test' ]
 				},
 				'three': {
-					path: './',
+					path: LOCAL,
 					command: 'node',
 					arguments: [ './src/index.js' ]
 				}
@@ -423,17 +424,17 @@ describe( 'Command Sets', function() {
 		it( 'should parse to the correct representation', function() {
 			set.should.eql( {
 				'one': {
-					path: './',
+					path: LOCAL,
 					command: 'gulp',
 					arguments: [ 'build' ]
 				},
 				'two': {
-					path: './',
+					path: LOCAL,
 					command: 'gulp',
 					arguments: [ 'test' ]
 				},
 				'three': {
-					path: './',
+					path: LOCAL,
 					command: 'node',
 					arguments: [ './src/index.js' ]
 				}
@@ -454,17 +455,17 @@ describe( 'Command Sets', function() {
 		it( 'should parse to the correct representation', function() {
 			set.should.eql( {
 				'one': {
-					path: './',
+					path: LOCAL,
 					command: 'gulp',
 					arguments: [ 'build' ]
 				},
 				'two': {
-					path: './',
+					path: LOCAL,
 					command: 'gulp',
 					arguments: [ 'test' ]
 				},
 				'three': {
-					path: './',
+					path: LOCAL,
 					command: 'node',
 					arguments: [ './src/index.js' ]
 				}
