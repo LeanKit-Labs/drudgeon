@@ -5,13 +5,18 @@ var path = require( 'path' );
 var Monologue = require( 'monologue.js' )( _ );
 var debug = require( 'debug' )( 'drudgeon' );
 
+var LOCAL = '.' + path.sep;
+
 function addStep( exec, step, name, workingPath, context ) {
 	var succeeded = name + '-done';
 	var failed = name + '-failed';
 	var shell = {
 		_onEnter: function() {
+			context.emit( 'starting.' + name, name );
 			var result = this._handlers( name );
-			step.path = path.join( workingPath, step.path || '' );
+			if ( !path.isAbsolute( step.path ) ) {
+				step.path = path.join( workingPath, step.path || '' );
+			}
 			debug( 'Executing step "%s": "%s" with args "%s" at "%s"', name, step.command, step.arguments, step.path );
 			exec( step )
 				.progress( result.output )
@@ -20,14 +25,19 @@ function addStep( exec, step, name, workingPath, context ) {
 				.catch( result.failure );
 		}.bind( context )
 	};
-	shell[ succeeded ] = function() { this._nextStep(); }.bind( context );
-	shell[ failed ] = function( err ) { this.emit( 'commands.failed', err ); }.bind( context );
+	shell[ succeeded ] = function() {
+		this.emit( 'finished.' + name, name );
+		this._nextStep();
+	}.bind( context );
+	shell[ failed ] = function( err ) {
+		this.emit( 'commands.failed', err );
+	}.bind( context );
 	context.states[ name ] = shell;
 	context._steps.push( name );
 }
 
 function createMachine( exec, commandSet, workingPath ) {
-	workingPath = workingPath || commandSet.path || './';
+	workingPath = workingPath || commandSet.path || LOCAL;
 
 	var Machine = machina.Fsm.extend( {
 		_steps: [],
@@ -49,7 +59,7 @@ function createMachine( exec, commandSet, workingPath ) {
 		},
 
 		_handlers: function( op ) {
-			return  { 
+			return {
 				output: this._aggregate( op ),
 				success: this._handler( op + '-done' ),
 				failure: this._handler( op + '-failed' )
@@ -58,10 +68,11 @@ function createMachine( exec, commandSet, workingPath ) {
 
 		_nextStep: function() {
 			var currentStep = this._steps[ this._index ];
-			if( currentStep === _.last( this._steps ) ) {
+			if ( currentStep === _.last( this._steps ) ) {
 				this.emit( 'commands.complete' );
 			} else {
-				this.transition( this._steps[ ( ++ this._index ) ] );
+				var nextStep = this._steps[ ( ++this._index ) ];
+				this.transition( nextStep );
 			}
 		},
 

@@ -1,0 +1,6 @@
+#! /usr/bin/env node
+var err = process.stderr
+err.write( 'this ' );
+err.write( 'is' );
+err.write( ' a chunked error.' );
+err.write( '\n' );

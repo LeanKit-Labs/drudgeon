@@ -1,8 +1,8 @@
-> Roy: They have no respect for us up there. No respect whatsoever. We're all just drudgeons to them. 
+> Roy: They have no respect for us up there. No respect whatsoever. We're all just drudgeons to them.
 
-> Moss: Yes. If there were such a thing as a drudgeon, that is what we would be to them. 
+> Moss: Yes. If there were such a thing as a drudgeon, that is what we would be to them.
 
-> _IT Crowd, Episode 1.1 "Yesterday's Jam"_ 
+> _IT Crowd, Episode 1.1 "Yesterday's Jam"_
 
 ## drudgeon
 Drudgeon is state-machine-driven shell command runner that can alter the commands run based on platform. There is nothing fancy going on here, tell it what to do and then toss it aside like yesterday's jam.
@@ -36,6 +36,15 @@ drudgeon( set )
 		// output is a hash of all data written to stdout or stderr keyed by step name
 	} );
 ```
+
+## Events
+Each step emits the following events:
+
+ * starting.[stepName] - emitted before the step is called
+ * finished.[stepName] - emitted after the step completes without error
+ * [stepName].output - emitted for each write stdout receives from a step
+ * commands.complete - emitted when all steps have completed successfully
+ * commands.failed - emitted when a step fails with an error
 
 ## Command Set
 Steps are defined from a object literal that has a number of supported formats for defining how to execute a step.
