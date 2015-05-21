@@ -1,5 +1,8 @@
 ## 0.1.#
 
+### 0.1.7
+ * Fix defect where absolute task paths would get join to relative paths causing the leading slash to be removed
+
 ### 0.1.6
  * Emit events for starting/finishing steps
  * Remove junk console.log statements

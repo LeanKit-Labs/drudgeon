@@ -3,10 +3,10 @@ var _ = require( 'lodash' );
 var fsm = require( '../src/fsm.js' );
 var when = require( 'when' );
 var set = require( '../src/set.js' );
-// var path = require( 'path' );
+var path = require( 'path' );
 
-// var SEP = path.sep;
-// var OTHER = path.sep === '/' ? '\\' : '/';
+var SEP = path.sep;
+var OTHER = path.sep === '/' ? '\\' : '/';
 
 function createStep( msgs, code ) { // jshint ignore: line
 	return function() {
@@ -31,7 +31,7 @@ function createStep( msgs, code ) { // jshint ignore: line
 describe( 'FSM', function() {
 	describe( 'with steps', function() {
 		var simple = {
-			'one': './a/:one 1',
+			'one': '/a/:one 1',
 			'two': './b/:two 2',
 			'three': './c/:three 3',
 		};
@@ -46,11 +46,11 @@ describe( 'FSM', function() {
 			var outcome;
 			var responses = {
 				//jshint ignore : start
-				'{"path":"a/","command":"one","arguments":["1"]}': createStep( [ "running a!" ], 0 ),
+				'{"path":"/a/","command":"one","arguments":["1"]}': createStep( [ "running a!" ], 0 ),
 				'{"path":"b/","command":"two","arguments":["2"]}': createStep( [ "running b!" ], 0 ),
 				'{"path":"c/","command":"three","arguments":["3"]}': createStep( [ "running c!", "c - part 2" ], 0 ),
 				// these lines are for windows because lol, windows paths
-				'{"path":"a\\\\","command":"one","arguments":["1"]}': createStep( [ "running a!" ], 0 ),
+				'{"path":"\\\\a\\\\","command":"one","arguments":["1"]}': createStep( [ "running a!" ], 0 ),
 				'{"path":"b\\\\","command":"two","arguments":["2"]}': createStep( [ "running b!" ], 0 ),
 				'{"path":"c\\\\","command":"three","arguments":["3"]}': createStep( [ "running c!", "c - part 2" ], 0 ),
 				//jshint ignore : end
@@ -110,11 +110,11 @@ describe( 'FSM', function() {
 			var outcome;
 			var responses = {
 				//jshint ignore : start
-				'{"path":"a/","command":"one","arguments":["1"]}': createStep( [ "running a!" ], 0 ),
+				'{"path":"/a/","command":"one","arguments":["1"]}': createStep( [ "running a!" ], 0 ),
 				'{"path":"b/","command":"two","arguments":["2"]}': createStep( [ "running b!" ], 1 ),
 				'{"path":"c/","command":"three","arguments":["3"]}': createStep( [ "running c!", "c - part 2" ], 0 ),
 				// these lines are for windows because lol, windows paths
-				'{"path":"a\\\\","command":"one","arguments":["1"]}': createStep( [ "running a!" ], 0 ),
+				'{"path":"\\\\a\\\\","command":"one","arguments":["1"]}': createStep( [ "running a!" ], 0 ),
 				'{"path":"b\\\\","command":"two","arguments":["2"]}': createStep( [ "running b!" ], 1 ),
 				'{"path":"c\\\\","command":"three","arguments":["3"]}': createStep( [ "running c!", "c - part 2" ], 0 ),
 				// jshint ignore : end

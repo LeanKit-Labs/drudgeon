@@ -472,4 +472,27 @@ describe( 'Command Sets', function() {
 			} );
 		} );
 	} );
+
+	describe( 'when loading steps that include absolute path', function() {
+		var set;
+		before( function() {
+			set = commandSet( 'darwin', {
+				test: {
+					cmd: 'npm',
+					cwd: '/Users/alex/test',
+					arguments: [ 'list' ]
+				}
+			} );
+		} );
+
+		it( 'should not truncate leading slash from cwd', function() {
+			set.should.eql(
+				{ test: {
+						path: '/Users/alex/test',
+						command: 'npm',
+						arguments: [ 'list' ]
+				} }
+			);
+		} );
+	} );
 } );

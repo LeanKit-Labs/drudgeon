@@ -14,7 +14,9 @@ function addStep( exec, step, name, workingPath, context ) {
 		_onEnter: function() {
 			context.emit( 'starting.' + name, name );
 			var result = this._handlers( name );
-			step.path = path.join( workingPath, step.path || '' );
+			if ( !path.isAbsolute( step.path ) ) {
+				step.path = path.join( workingPath, step.path || '' );
+			}
 			debug( 'Executing step "%s": "%s" with args "%s" at "%s"', name, step.command, step.arguments, step.path );
 			exec( step )
 				.progress( result.output )

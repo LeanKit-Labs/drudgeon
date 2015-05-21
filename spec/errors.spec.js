@@ -27,7 +27,7 @@ describe( 'Error handling', function() {
 		} );
 
 		it( 'should capture error', function() {
-			error.bad.should.eql( [ 'Attempting to execute the command "derp" at "' + LOCAL + '" failed with "spawn ENOENT"' ] );
+			error.bad.should.eql( [ 'Attempting to execute the command "derp" at "' + LOCAL + '" failed with "spawn derp ENOENT"' ] );
 		} );
 	} );
 } );
