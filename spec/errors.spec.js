@@ -2,7 +2,7 @@ var should = require( 'should' ); // jshint ignore: line
 var path = require( 'path' );
 var fsm = require( '../src/fsm.js' );
 var set = require( '../src/set.js' );
-var start = require( '../src/process.js' ).start;
+var start = require( '../src/process.js' ).start.bind( undefined, false );
 
 var LOCAL = '.' + path.sep;
 

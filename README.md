@@ -16,8 +16,14 @@ It will:
 
 ## API
 
-### drudgeon( [platform], commandSet, [relativePath] )
-Platform defaults to the value returned from the `os` module's `platform` call. `commandSet` should be an object literal following the command set format explained below. The `relativePath` arguments sets a top-level relative path that all commands will run relative to (this defaults to the processes working directory).
+### drudgeon( commandSet, [config] )
+`commandSet` should be an object literal following the command set format explained below.
+
+The optional `config` object current has the following three properties:
+
+ * `platform` - defaults to the result of `os` module's `platform` call
+ * `relativePath` - top-level path for all commands (default: process's working directory)
+ * `inheritIO` - causes child processes to pipe their IO to the parent's (default: `false` )
 
 ```javascript
 var drudgeon = require( 'drudgeon' );
@@ -45,6 +51,8 @@ Each step emits the following events:
  * [stepName].output - emitted for each write stdout receives from a step
  * commands.complete - emitted when all steps have completed successfully
  * commands.failed - emitted when a step fails with an error
+
+> Note: the output events will not be emitted if `inheritIO` was used.
 
 ## Command Set
 Steps are defined from a object literal that has a number of supported formats for defining how to execute a step.

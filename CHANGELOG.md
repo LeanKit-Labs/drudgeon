@@ -1,5 +1,8 @@
 ## 0.1.#
 
+### 0.1.8
+ * Add ability to simply have spawned processes inherit the parent's stdio.
+
 ### 0.1.7
  * Fix defect where absolute task paths would get join to relative paths causing the leading slash to be removed
 
